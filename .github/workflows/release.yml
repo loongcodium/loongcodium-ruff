@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  RUFF_VERSION: 0.14.11
-  RUFF_VSCODE_VERSION: 2026.34.0
+  RUFF_VERSION: 0.15.0
+  RUFF_VSCODE_VERSION: 2026.36.0
 
 jobs:
   build-ruff:
@@ -23,7 +23,7 @@ jobs:
             base_image: --platform=linux/loong64 ghcr.io/loong64/debian:trixie
             maturin_docker_options: -e JEMALLOC_SYS_WITH_LG_PAGE=16
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
           persist-credentials: false
@@ -39,7 +39,7 @@ jobs:
         run: |
           git apply ruff-loong64/patches/ruff.patch
           rm -rf ruff-loong64
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Prep README.md
@@ -47,13 +47,13 @@ jobs:
       - name: Build wheels
         uses: PyO3/maturin-action@86b9d133d34bc1b40018696f782949dac11bd380 # v1.49.4
         with:
-          maturin-version: v1.9.6
+          maturin-version: v1.11.5
           target: ${{ matrix.platform.target }}
-          manylinux: auto
+          manylinux: ${{ matrix.platform.manylinux }}
           docker-options: ${{ matrix.platform.maturin_docker_options }}
-          args: --release --locked --out dist
+          args: --release --locked --out dist --compatibility pypi
       - uses: uraimo/run-on-arch-action@d94c13912ea685de38fccc1109385b83fd79427d # v3.0.1
-        if: ${{ matrix.platform.arch != 'ppc64' && matrix.platform.arch != 'ppc64le'}}
+        if: ${{ matrix.platform.arch != 'ppc64le'}}
         name: Test wheel
         with:
           arch: ${{ matrix.platform.arch == 'arm' && 'armv6' || matrix.platform.arch }}
@@ -120,13 +120,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
           persist-credentials: false
           repository: astral-sh/ruff-vscode
           ref: ${{ env.RUFF_VSCODE_VERSION }}
-      - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
         with:
           python-version: 3.x
       - name: Install the latest version of uv
@@ -157,7 +157,7 @@ jobs:
           > tmp.json && mv -v tmp.json package.json
 
       - name: Install Node.js
-        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
         with:
           node-version: 24
 
@@ -172,7 +172,7 @@ jobs:
 
       # Upload the extension.
       - name: Upload artifacts
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: dist-${{ matrix.target }}
           path: ./dist
