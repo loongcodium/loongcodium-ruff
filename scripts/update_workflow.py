@@ -62,6 +62,13 @@ def gen_ruff_binaries_job(original_workflow, patch_path="patches/ruff.patch"):
     """)
     job["strategy"]["matrix"]["platform"] = platform_loongarch64
 
+    # Patch build step
+    build_wheel_step = get_step(job["steps"], starts="PyO3/maturin-action")
+    build_wheel_step["with"]["args"] = build_wheel_step["with"]["args"].replace(
+        # There's currently no official PyPI support for LoongArch
+        " --compatibility pypi", ""
+    )
+
     # Patch check step
     test_wheel_step = list(
         filter(lambda step: step.get("name") == "Test wheel", job["steps"])

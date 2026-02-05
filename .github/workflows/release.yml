@@ -51,7 +51,7 @@ jobs:
           target: ${{ matrix.platform.target }}
           manylinux: ${{ matrix.platform.manylinux }}
           docker-options: ${{ matrix.platform.maturin_docker_options }}
-          args: --release --locked --out dist --compatibility pypi
+          args: --release --locked --out dist
       - uses: uraimo/run-on-arch-action@d94c13912ea685de38fccc1109385b83fd79427d # v3.0.1
         if: ${{ matrix.platform.arch != 'ppc64le'}}
         name: Test wheel
