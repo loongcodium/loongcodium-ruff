@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  RUFF_VERSION: 0.15.16
-  RUFF_VSCODE_VERSION: 2026.48.0
+  RUFF_VERSION: 0.15.17
+  RUFF_VSCODE_VERSION: 2026.50.0
 
 jobs:
   build-ruff:
@@ -23,7 +23,7 @@ jobs:
             base_image: --platform=linux/loong64 ghcr.io/loong64/debian:trixie
             maturin_docker_options: -e JEMALLOC_SYS_WITH_LG_PAGE=16
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           submodules: recursive
           persist-credentials: false
