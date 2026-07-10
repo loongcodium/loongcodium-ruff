@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  RUFF_VERSION: 0.15.20
-  RUFF_VSCODE_VERSION: 2026.56.0
+  RUFF_VERSION: 0.15.21
+  RUFF_VSCODE_VERSION: 2026.60.0
 
 jobs:
   build-ruff:
@@ -23,7 +23,7 @@ jobs:
             base_image: --platform=linux/loong64 ghcr.io/loong64/debian:trixie
             maturin_docker_options: -e JEMALLOC_SYS_WITH_LG_PAGE=16
     steps:
-      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           submodules: recursive
           persist-credentials: false
@@ -39,7 +39,7 @@ jobs:
         run: |
           git apply ruff-loong64/patches/ruff.patch
           rm -rf ruff-loong64
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Prep README.md
@@ -47,7 +47,7 @@ jobs:
       - name: Build wheels
         uses: PyO3/maturin-action@e83996d129638aa358a18fbd1dfb82f0b0fb5d3b # v1.51.0
         with:
-          maturin-version: v1.14.0
+          maturin-version: v1.14.1
           target: ${{ matrix.platform.target }}
           manylinux: ${{ matrix.platform.manylinux }}
           docker-options: ${{ matrix.platform.maturin_docker_options }}
@@ -120,13 +120,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           fetch-depth: ${{ env.FETCH_DEPTH }}
           persist-credentials: false
           repository: astral-sh/ruff-vscode
           ref: ${{ env.RUFF_VSCODE_VERSION }}
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: 3.x
       - name: Install the latest version of uv
