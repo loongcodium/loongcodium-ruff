@@ -9,7 +9,7 @@ on:
 
 env:
   RUFF_VERSION: 0.16.0
-  RUFF_VSCODE_VERSION: 2026.64.0
+  RUFF_VSCODE_VERSION: 2026.66.0
 
 jobs:
   build-ruff:
