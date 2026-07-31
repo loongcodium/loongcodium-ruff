@@ -8,8 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  RUFF_VERSION: 0.16.0
-  RUFF_VSCODE_VERSION: 2026.66.0
+  RUFF_VERSION: 0.16.1
+  RUFF_VSCODE_VERSION: 2026.68.0
 
 jobs:
   build-ruff:
@@ -23,7 +23,7 @@ jobs:
             base_image: --platform=linux/loong64 ghcr.io/loong64/debian:trixie
             maturin_docker_options: -e JEMALLOC_SYS_WITH_LG_PAGE=16
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
           persist-credentials: false
@@ -39,7 +39,7 @@ jobs:
         run: |
           git apply ruff-loong64/patches/ruff.patch
           rm -rf ruff-loong64
-      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Prep README.md
@@ -157,9 +157,10 @@ jobs:
           > tmp.json && mv -v tmp.json package.json
 
       - name: Install Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 24
+          package-manager-cache: false
 
       # Install Node dependencies.
       - run: npm ci
