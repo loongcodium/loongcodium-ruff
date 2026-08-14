@@ -8,12 +8,12 @@ on:
   workflow_dispatch:
 
 env:
-  RUFF_VERSION: 0.16.2
-  RUFF_VSCODE_VERSION: 2026.70.0
+  RUFF_VERSION: 0.16.3
+  RUFF_VSCODE_VERSION: 2026.72.0
 
 jobs:
   build-ruff:
-    runs-on: ubuntu-latest
+    runs-on: depot-ubuntu-24.04-4
     strategy:
       matrix:
         platform:
